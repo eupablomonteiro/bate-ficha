@@ -1,0 +1,15 @@
+# Dependências
+node_modules/
+
+# Arquivos de ambiente
+.env*
+
+# Build do TypeScript
+dist/
+
+# Logs
+*.log
+
+# Editor/IDE
+.vscode/
+.idea/

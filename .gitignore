@@ -1,0 +1,48 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Lockfiles gerados
+
+# Builds
+dist/
+.next/
+out/
+.turbo/
+.cache/
+
+# Ambiente
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Editor/IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Vercel
+.vercel
+
+# Testes
+coverage/
+.nyc_output/
+docs/

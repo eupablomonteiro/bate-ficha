@@ -1,0 +1,22 @@
+{
+  "name": "bate-ficha",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Bate-Ficha - monorepo (web + api)",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  }
+}

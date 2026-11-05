@@ -1,0 +1,91 @@
+# Dependências
+/node_modules
+/.pnp
+.pnp.js
+
+# Testes
+/coverage
+/.nyc_output
+
+# Builds
+/.next
+/out
+/dist
+
+# Cache
+/.cache
+/.vercel
+/.svelte-kit
+
+# Ambiente
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Editor/IDE
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Pacotes
+# /packages/*/node_modules
+
+# TypeScript
+*.tsbuildinfo
+
+# Next.js
+.next
+.next/cache
+
+# Storybook
+.storybook
+.stories
+
+# Cypress
+/cypress/videos
+/cypress/screenshots
+
+# Jest
+/jest-cache
+/jest-results
+
+# ESLint
+.eslintcache
+
+# Prettier
+.prettiercache
+
+# Husky
+.husky
+
+# Lerna
+lerna-debug.log
+
+# Turbo
+.turbo
+
+# Vercel
+.vercel
+
+# Outros
+*.log
+*.tmp
+*.temp
+*.bak
+*.md
