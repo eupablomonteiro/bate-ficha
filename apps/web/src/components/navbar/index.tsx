@@ -1,17 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import NswLogo from "@/assets/nsw-removebg-preview.png";
 
 // Context
 import { useAuth } from "@/context/AuthContext";
-import { useAnimation } from "@/context/AnimationContext";
-
-// Animation
-import { motion } from "framer-motion";
 
 // Components
 import { Button } from "@/components/ui/button";
@@ -23,7 +17,6 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import LoadingScreen from "@/components/loadingScreen";
 
 // Icons
 import {
@@ -39,12 +32,10 @@ import { GiPodiumWinner } from "react-icons/gi";
 
 const Navbar = () => {
   const router = useRouter();
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const pathname = usePathname();
   const { logout } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const { settings } = useAnimation();
 
   const handleLogout = async () => {
     try {
@@ -57,12 +48,10 @@ const Navbar = () => {
   };
 
   const handleNavigation = (path: string) => {
+    setIsSheetOpen(false);
+
     if (pathname !== path) {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        router.push(path);
-        setIsTransitioning(false);
-      }, settings.transitionDuration * 1000);
+      router.push(path);
     }
   };
 
@@ -70,7 +59,7 @@ const Navbar = () => {
     <nav className="w-full fixed top-0 left-0 right-0 z-40 bg-zinc-950 p-4">
       <div className="container mx-auto flex flex-wrap gap-4 justify-between items-center">
         <Link href="/home" passHref className="flex items-center gap-2 text-sm">
-          <Image src={NswLogo} alt="NSW Logo" width={100} height={66} />
+          BateFicha
         </Link>
         <div className="flex items-center gap-2">
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -94,12 +83,7 @@ const Navbar = () => {
                   Opções de navegação
                 </SheetDescription>
               </SheetHeader>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="flex flex-col gap-4 mt-6 px-4"
-              >
+              <div className="flex flex-col gap-4 mt-6 px-4">
                 <Link
                   href="/home"
                   className={`w-full flex items-center px-4 py-2 rounded gap-2 justify-start bg-zinc-900 text-zinc-200 font-bold ${
@@ -203,12 +187,11 @@ const Navbar = () => {
                   )}
                   Deslogar
                 </Button>
-              </motion.div>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
       </div>
-      {isTransitioning && <LoadingScreen />}
     </nav>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -8,9 +9,6 @@ import api from "@/services/api";
 
 // HOC
 import withAuth from "@/hoc/withAuth";
-
-// Layout
-import PrivateLayout from "@/layouts/PrivateLayout";
 
 // Contexts and Hooks
 import { useAuth } from "@/context/AuthContext";
@@ -31,9 +29,9 @@ import { GameModeSelector } from "@/components/CreateOrEditMatches/GameModeSelec
 import SelectThePlayers from "@/components/CreateOrEditMatches/SelectThePlayers";
 import { FinalizerSelection } from "@/components/CreateOrEditMatches/FinalizerSelection";
 import { PlayerSelection } from "@/components/CreateOrEditMatches/PlayerSelection";
-import ConfirmationModal from "@/components/ConfirmationModal";
 import Header from "@/components/CreateOrEditMatches/Header";
 import LinkBack from "@/components/linkBack";
+import { SkeletonMatchLoading } from "../skeleton";
 
 // Types
 import {
@@ -46,6 +44,11 @@ import {
 // Icons
 import { Save, Pencil } from "lucide-react";
 
+
+const ConfirmationModal = dynamic(
+  () => import("@/components/ConfirmationModal"),
+  { ssr: false }
+);
 
 const EditMatchPage = () => {
   const { id } = useParams();
@@ -363,17 +366,11 @@ const EditMatchPage = () => {
   };
 
   if (isMatchLoading) {
-    return (
-      <PrivateLayout>
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
-        </div>
-      </PrivateLayout>
-    );
+    return <SkeletonMatchLoading />;
   }
 
   return (
-    <PrivateLayout>
+    <>
       <Card className="container mx-auto w-full max-w-md p-2 border-0">
         <LinkBack href={`/matches/${id}`} /> 
         <Header
@@ -461,7 +458,7 @@ const EditMatchPage = () => {
         title="Confirmar alterações"
         message="Tem certeza que deseja salvar as alterações na partida?"
       />
-    </PrivateLayout>
+    </>
   );
 };
 

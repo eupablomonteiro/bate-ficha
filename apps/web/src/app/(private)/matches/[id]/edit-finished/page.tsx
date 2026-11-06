@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -9,9 +10,6 @@ import api, { editFinishedMatch } from "@/services/api";
 
 // HOC
 import withAuth from "@/hoc/withAuth";
-
-// Layout
-import PrivateLayout from "@/layouts/PrivateLayout";
 
 // Contexts and Hooks
 import { useAuth } from "@/context/AuthContext";
@@ -31,8 +29,8 @@ import { TeamSlots } from "@/components/CreateOrEditMatches/TeamSlots";
 import { PlayerSelection } from "@/components/CreateOrEditMatches/PlayerSelection";
 import SelectThePlayers from "@/components/CreateOrEditMatches/SelectThePlayers";
 import { Label } from "@/components/ui/label";
-import ConfirmationModal from "@/components/ConfirmationModal";
 import LinkBack from "@/components/linkBack";
+import { SkeletonMatchLoading } from "../skeleton";
 
 // Types
 import {
@@ -43,6 +41,11 @@ import {
 
 // Icons
 import { Save, Trophy, AlertTriangle, Users } from "lucide-react";
+
+const ConfirmationModal = dynamic(
+  () => import("@/components/ConfirmationModal"),
+  { ssr: false }
+);
 
 const EditFinishedMatchPage = () => {
   const { id } = useParams();
@@ -368,19 +371,13 @@ const EditFinishedMatchPage = () => {
   };
 
   if (isMatchLoading) {
-    return (
-      <PrivateLayout>
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
-        </div>
-      </PrivateLayout>
-    );
+    return <SkeletonMatchLoading />;
   }
 
   if (!match) return null;
 
   return (
-    <PrivateLayout>
+    <>
       <Card className="container mx-auto w-full max-w-md p-2 border-0">
         <LinkBack href={`/matches/${id}`} /> 
         <Header
@@ -628,7 +625,7 @@ const EditFinishedMatchPage = () => {
           </>
         }
       />
-    </PrivateLayout>
+    </>
   );
 };
 

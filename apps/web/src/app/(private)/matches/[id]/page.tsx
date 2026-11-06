@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/services/api";
 import withAuth from "@/hoc/withAuth";
@@ -13,17 +14,18 @@ import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { getApiErrorMessage } from "@/lib/api-error";
 
-// Layout
-import PrivateLayout from "@/layouts/PrivateLayout";
-
 // Components
 import { Button } from "@/components/ui/button";
 import Versus from "@/components/versus";
 import { SkeletonMatchLoading } from "./skeleton";
 import Link from "next/link";
 import { ArrowLeft, PencilIcon } from "lucide-react";
-import ConfirmationModal from "@/components/ConfirmationModal";
 import LinkBack from "@/components/linkBack";
+
+const ConfirmationModal = dynamic(
+  () => import("@/components/ConfirmationModal"),
+  { ssr: false }
+);
 
 interface Match {
   _id: string;
@@ -141,9 +143,9 @@ const MatchPage = () => {
 
   if (isMatchLoading) {
     return (
-      <PrivateLayout>
+      <>
         <SkeletonMatchLoading />
-      </PrivateLayout>
+      </>
     );
   }
 
@@ -162,7 +164,7 @@ const MatchPage = () => {
   }
 
   return (
-    <PrivateLayout>
+    <>
       <div className="container flex flex-col gap-2 mx-auto p-2">
         <div className="flex justify-between">
           <LinkBack href={`/home`} text="Voltar" />
@@ -321,7 +323,7 @@ const MatchPage = () => {
           />
         </div>
       </div>
-    </PrivateLayout>
+    </>
   );
 };
 

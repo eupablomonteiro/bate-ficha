@@ -30,9 +30,9 @@ const userSettingsSchema = new Schema(
       },
       transitionDuration: {
         type: Number,
-        default: 2.0, // Valor padrão é 2 segundos
-        min: 0,       // Sem animação
-        max: 2.0,     // Máximo permitido
+        default: 2.0,
+        min: 0,
+        max: 5.0,
       },
     },
   },

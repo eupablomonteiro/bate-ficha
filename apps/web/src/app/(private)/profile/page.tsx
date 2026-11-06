@@ -1,13 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
 
 // Components
 import { BestPartner } from "@/components/profileComponents/BestPartner";
 import { PlayerHeader } from "@/components/profileComponents/PlayerHeader";
 import { PlayerStats } from "@/components/profileComponents/PlayerStats";
-import { EditProfileModal } from "@/components/profileComponents/EditProfileModal";
+
+const EditProfileModal = dynamic(
+  () =>
+    import("@/components/profileComponents/EditProfileModal").then(
+      (module) => module.EditProfileModal
+    ),
+  { ssr: false }
+);
 
 // Contexts and Hooks
 import { useAuth } from "@/context/AuthContext";
@@ -17,7 +25,6 @@ import { fetchPlayerProfile, fecthLastFiveMatchesByGamemode } from "@/services/a
 
 // Utils
 import withAuth from "@/hoc/withAuth";
-import PrivateLayout from "@/layouts/PrivateLayout";
 
 const Profile = () => {
   const { player, updatePlayer } = useAuth();
@@ -41,7 +48,7 @@ const Profile = () => {
   if (!player) return null;
 
   return (
-    <PrivateLayout>
+    <>
       <div className="flex flex-col gap-2">
         <PlayerHeader
           player={playerData}
@@ -78,7 +85,7 @@ const Profile = () => {
           />
         )}
       </div>
-    </PrivateLayout>
+    </>
   );
 };
 

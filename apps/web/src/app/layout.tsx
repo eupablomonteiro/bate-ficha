@@ -4,7 +4,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/context/AuthContext";
 import ClientProviders from "@/components/ClientProviders";
 import RouteTransitionWrapper from "@/components/RouteTransitionWrapper";
-import { ConfigProvider } from "@/context/ConfigContext";
 import { UserSettingsProvider } from "@/context/UserSettingsContext";
 import { AnimationProvider } from "@/context/AnimationContext";
 
@@ -44,18 +43,16 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${uniNeue.className} bg-zinc-950 h-dvh`}>
         <AuthProvider>
-          <ConfigProvider>
-            <AnimationProvider>
-              <ClientProviders>
+          <AnimationProvider>
+            <ClientProviders>
+              <UserSettingsProvider>
                 <RouteTransitionWrapper>
-                  <UserSettingsProvider>
-                    <main>{children}</main>
-                    <Toaster />
-                  </UserSettingsProvider>
+                  <main>{children}</main>
+                  <Toaster />
                 </RouteTransitionWrapper>
-              </ClientProviders>
-            </AnimationProvider>
-          </ConfigProvider>
+              </UserSettingsProvider>
+            </ClientProviders>
+          </AnimationProvider>
         </AuthProvider>
       </body>
     </html>

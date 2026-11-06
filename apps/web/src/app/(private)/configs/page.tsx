@@ -1,9 +1,9 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
 import {
   Card,
   CardContent,
@@ -11,113 +11,34 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import PrivateLayout from "@/layouts/PrivateLayout";
 import withAuth from "@/hoc/withAuth";
-import React, { useState, useEffect } from "react";
 import { Cookie, Hourglass, Settings } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { useUserSettings } from "@/context/UserSettingsContext";
 import { useAnimation } from "@/context/AnimationContext";
 
 const Configs = () => {
-  const { toast } = useToast();
-  const [enableTransition, setEnableTransition] = useState(true);
-  const [transitionDuration, setTransitionDuration] = useState(2000);
-  const [acceptCookies, setAcceptCookies] = useState(false);
-  const [isChanged, setIsChanged] = useState(false);
-  const { allowCookies, updateAllowCookies } =
-    useUserSettings();
-  const { settings, updateSettings, isLoading } = useAnimation();
-  const [localDuration, setLocalDuration] = useState(settings.transitionDuration);
+  const { allowCookies, updateAllowCookies } = useUserSettings();
+  const { settings, updateSettings } = useAnimation();
+  const [localDuration, setLocalDuration] = useState(
+    settings.transitionDuration
+  );
   const [isDurationChanged, setIsDurationChanged] = useState(false);
-
-  // Carregar configurações do localStorage quando a página carregar
-  useEffect(() => {
-    // Carregar configuração de cookies
-    const savedCookieConfig = localStorage.getItem("acceptCookies");
-    if (savedCookieConfig) {
-      setAcceptCookies(savedCookieConfig === "true");
-    }
-
-    // Carregar configurações de transição
-    const savedTransitionConfig = localStorage.getItem("enableTransition");
-    if (savedTransitionConfig) {
-      setEnableTransition(savedTransitionConfig === "true");
-    }
-
-    const savedDurationConfig = localStorage.getItem("transitionDuration");
-    if (savedDurationConfig) {
-      setTransitionDuration(parseInt(savedDurationConfig));
-    }
-  }, []);
-
-  // Monitorar mudanças nas configurações
-  useEffect(() => {
-    // Verificar se algo mudou em relação ao que está salvo
-    const savedCookieConfig = localStorage.getItem("acceptCookies") === "true";
-    const savedTransitionConfig =
-      localStorage.getItem("enableTransition") === "true";
-    const savedDurationConfig = parseInt(
-      localStorage.getItem("transitionDuration") || "2000"
-    );
-
-    const hasChanges =
-      savedCookieConfig !== acceptCookies ||
-      savedTransitionConfig !== enableTransition ||
-      savedDurationConfig !== transitionDuration;
-
-    setIsChanged(hasChanges);
-  }, [acceptCookies, enableTransition, transitionDuration]);
-
-  // Atualizar estado local quando as configurações carregarem
-  useEffect(() => {
-    setLocalDuration(settings.transitionDuration);
-  }, [settings.transitionDuration]);
-
-  // Verificar mudanças
-  useEffect(() => {
-    setIsDurationChanged(localDuration !== settings.transitionDuration);
-  }, [localDuration, settings.transitionDuration]);
-
-  const handleSaveConfigs = () => {
-    // Salvar configurações no localStorage
-    localStorage.setItem("acceptCookies", acceptCookies.toString());
-    localStorage.setItem("enableTransition", enableTransition.toString());
-    localStorage.setItem("transitionDuration", transitionDuration.toString());
-
-    // Aplicar configurações na aplicação
-    // (você pode adicionar lógica adicional conforme necessário)
-
-    // Mostrar feedback ao usuário
-    toast({
-      title: "Configurações salvas",
-      description: "Suas preferências foram atualizadas com sucesso.",
-    });
-
-    setIsChanged(false);
-  };
-
-  const formatDuration = (ms: number) => {
-    return (ms / 1000).toFixed(1) + "s";
-  };
 
   const handleToggleCookies = async (checked: boolean) => {
     await updateAllowCookies(checked);
-  };
-
-  const handleSaveAnimationSettings = async () => {
-    await updateSettings({
-      transitionDuration: localDuration
-    });
-    setIsDurationChanged(false);
   };
 
   const handleToggleAnimations = async (enabled: boolean) => {
     await updateSettings({ enabled });
   };
 
+  const handleSaveAnimationSettings = async () => {
+    await updateSettings({ transitionDuration: localDuration });
+    setIsDurationChanged(false);
+  };
+
   return (
-    <PrivateLayout>
+    <>
       <div className="container mx-auto max-w-md p-4">
         <h1 className="flex gap-2 items-center text-xl font-bold mb-6 text-zinc-200">
           <Settings className="text-green-500" /> Configurações
@@ -191,7 +112,7 @@ const Configs = () => {
                 Animações
               </CardTitle>
               <CardDescription>
-                Configurar a exibição das animações de carregamento
+                Controlar a transição da bola entre telas
               </CardDescription>
             </CardHeader>
             <CardContent className="p-4 pt-0">
@@ -203,8 +124,8 @@ const Configs = () => {
                       {settings.enabled ? "Animações ativadas" : "Animações desativadas"}
                     </div>
                     <p className="text-sm text-zinc-400">
-                      {settings.enabled 
-                        ? "Transições suaves entre telas" 
+                      {settings.enabled
+                        ? "Bola de sinuca aleatória entre telas"
                         : "Navegação instantânea entre telas"}
                     </p>
                   </div>
@@ -216,7 +137,7 @@ const Configs = () => {
                   />
                 </Label>
 
-                {/* Controle de duração (apenas visível se animações estiverem ativadas) */}
+                {/* Controle de duração */}
                 {settings.enabled && (
                   <div className="space-y-3 p-3 bg-zinc-800/80 rounded-lg border border-zinc-700">
                     <div className="flex justify-between items-center">
@@ -225,17 +146,18 @@ const Configs = () => {
                         {localDuration === 0 ? "Instantâneo" : `${localDuration.toFixed(1)}s`}
                       </span>
                     </div>
-                    <Slider
-                      min={0}
-                      max={2}
-                      step={0.1}
-                      value={[localDuration]}
-                      onValueChange={(values) => setLocalDuration(values[0])}
-                      className="w-full"
+                    <input
+                      type="range"
+                      min="0"
+                      max="5"
+                      step="0.1"
+                      value={localDuration}
+                      onChange={(e) => setLocalDuration(parseFloat(e.target.value))}
+                      className="w-full accent-green-500"
                     />
                     <div className="flex justify-between text-xs text-zinc-500">
                       <span>Instantâneo</span>
-                      <span>2s (Padrão)</span>
+                      <span>5s (Máximo)</span>
                     </div>
                     
                     {isDurationChanged && (
@@ -252,13 +174,13 @@ const Configs = () => {
 
                 <div className="p-3 bg-zinc-800/50 rounded-lg text-sm text-zinc-400">
                   <p>
-                    Você pode desativar completamente as animações ou ajustar 
-                    por quanto tempo elas serão exibidas durante a navegação.
+                    A transição usa bolas de sinuca atravessando a tela. Você
+                    pode desativá-las para navegar instantaneamente.
                   </p>
                   {settings.enabled && (
                     <p className="mt-2">
-                      Tempo atual: {settings.transitionDuration === 0 
-                        ? "Instantâneo" 
+                      Tempo atual: {settings.transitionDuration === 0
+                        ? "Instantâneo"
                         : `${settings.transitionDuration.toFixed(1)} segundos`}
                     </p>
                   )}
@@ -268,7 +190,7 @@ const Configs = () => {
           </Card>
         </div>
       </div>
-    </PrivateLayout>
+    </>
   );
 };
 

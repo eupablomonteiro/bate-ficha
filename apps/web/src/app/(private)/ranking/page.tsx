@@ -2,7 +2,6 @@
 
 // Globals
 import React from "react";
-import PrivateLayout from "@/layouts/PrivateLayout";
 import api from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -61,7 +60,7 @@ const Ranking = () => {
 
   if (isLoading) {
     return (
-      <PrivateLayout>
+      <>
         <div className="px-4 flex flex-col gap-4">
         <Title />
           <div className="flex flex-col gap-4">
@@ -73,35 +72,41 @@ const Ranking = () => {
           <SkeletonRanking />
           </div>
         </div>
-      </PrivateLayout>
+      </>
     );
   }
 
   if (isError) {
     return (
-      <PrivateLayout>
+      <>
         <p className="px-4 py-2 text-red-500">
           {getApiErrorMessage(error, "Algo deu errado ao carregar o ranking.")}
         </p>
-      </PrivateLayout>
+      </>
     );
   }
 
-  if (!fetchPlayersToRanking) {
+  if (!fetchPlayersToRanking?.ranking?.length) {
     return (
-      <PrivateLayout>
-        <div className="px-4 py-2flex flex-col gap-2">
-          <p>Não há amigos para fazer o ranking. </p>
-          <Link href="/add-friends" className="text-green-300 border-b">
-            Seguir amigos?
-          </Link>
+      <>
+        <div className="px-4 flex flex-col gap-4">
+          <Title />
+          <div className="flex flex-col gap-2 px-4 py-2">
+            <p>
+              {fetchPlayersToRanking?.message ??
+                "Não há jogadores para exibir no ranking."}
+            </p>
+            <Link href="/add-friends" className="text-green-300 border-b w-fit">
+              Seguir amigos?
+            </Link>
+          </div>
         </div>
-      </PrivateLayout>
+      </>
     );
   }
 
   return (
-    <PrivateLayout>
+    <>
       <div className="px-4 flex flex-col gap-4">
         <Title />
         <Tabs defaultValue="solo" className="w-full flex flex-col gap-2">
@@ -146,7 +151,7 @@ const Ranking = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </PrivateLayout>
+    </>
   );
 };
 

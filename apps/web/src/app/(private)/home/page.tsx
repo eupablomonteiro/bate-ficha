@@ -4,9 +4,6 @@ import React from "react";
 import withAuth from "@/hoc/withAuth";
 import Link from "next/link";
 
-// Layout
-import PrivateLayout from "@/layouts/PrivateLayout";
-
 // Components
 import HistoryMatches from "@/components/historyMatches";
 
@@ -15,7 +12,7 @@ import { PlusCircle } from "lucide-react";
 
 const HomePage = () => {
   return (
-    <PrivateLayout>
+    <>
       <section className="flex flex-wrap justify-between items-center mb-2 gap-4 border-b border-zinc-900 px-2 pb-4">
         <div className="container mx-auto">
           <Link
@@ -29,7 +26,7 @@ const HomePage = () => {
         </div>
       </section>
       <HistoryMatches />
-    </PrivateLayout>
+    </>
   );
 };
 

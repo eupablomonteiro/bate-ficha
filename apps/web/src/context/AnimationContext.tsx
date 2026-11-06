@@ -13,8 +13,6 @@ interface AnimationSettings {
 
 interface AnimationContextType {
   settings: AnimationSettings;
-  isLoading: boolean;
-  isInitialized: boolean;
   updateSettings: (newSettings: Partial<AnimationSettings>) => Promise<void>;
 }
 
@@ -23,11 +21,9 @@ const AnimationContext = createContext<AnimationContextType | undefined>(undefin
 export const AnimationProvider = ({ children }: { children: ReactNode }) => {
   const { player } = useAuth();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isInitialized, setIsInitialized] = useState(false);
   const [settings, setSettings] = useState<AnimationSettings>({
     enabled: true,
-    transitionDuration: 2.0
+    transitionDuration: 2.0,
   });
 
   // Carregar configurações iniciais
@@ -36,7 +32,6 @@ export const AnimationProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await api.get("/settings/animations");
         setSettings(response.data);
-        setIsInitialized(true);
       } catch (error) {
         console.error("Erro ao carregar configurações de animação:", error);
         toast({
@@ -47,16 +42,11 @@ export const AnimationProvider = ({ children }: { children: ReactNode }) => {
           ),
           variant: "error",
         });
-      } finally {
-        setIsLoading(false);
       }
     };
 
     if (player?._id) {
       fetchSettings();
-    } else {
-      setIsInitialized(true);
-      setIsLoading(false);
     }
   }, [player, toast]);
 
@@ -84,12 +74,7 @@ export const AnimationProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AnimationContext.Provider
-      value={{
-        settings,
-        isLoading,
-        isInitialized,
-        updateSettings
-      }}
+      value={{ settings, updateSettings }}
     >
       {children}
     </AnimationContext.Provider>

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import NextShotWinsLogo from "@/assets/next-shot-wins-removebg-preview.png";
@@ -8,26 +9,20 @@ import { useAuth } from "@/context/AuthContext";
 
 // Components
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import LoadingScreen from "@/components/loadingScreen";
 import Login from "@/components/login";
-import Register from "@/components/register";
+
+const Register = dynamic(() => import("@/components/register"), {
+  ssr: false,
+});
 
 const InitialPage = () => {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
-    if (isLoading || !isAuthenticated) return;
-
-    setIsTransitioning(true);
-
-    const timer = setTimeout(() => {
-      setIsTransitioning(false);
-      router.push("/home");
-    }, 2000);
-
-    return () => clearTimeout(timer);
+    if (!isLoading && isAuthenticated) {
+      router.replace("/home");
+    }
   }, [isAuthenticated, isLoading, router]);
 
   return (
@@ -63,7 +58,6 @@ const InitialPage = () => {
           <Register />
         </TabsContent>
       </Tabs>
-      {isTransitioning && <LoadingScreen />}
     </div>
   );
 };

@@ -9,13 +9,13 @@ import { useQuery } from "@tanstack/react-query";
 // hoc
 import withAuth from "@/hoc/withAuth";
 
-// Layouts
-import PrivateLayout from "@/layouts/PrivateLayout";
-
 // Components
 import { PlayerHeader } from "@/components/profileComponents/PlayerHeader";
+import { HeaderSkeleton } from "@/components/profileComponents/PlayerHeader/skeleton";
 import { PlayerStats } from "@/components/profileComponents/PlayerStats";
+import { SummarySkeleton } from "@/components/profileComponents/PlayerStats/skeleton";
 import { BestPartner } from "@/components/profileComponents/BestPartner";
+import { BestPartnerSkeleton } from "@/components/profileComponents/BestPartner/skeleton";
 import { getApiErrorMessage } from "@/lib/api-error";
 
 const fetchPlayerByNickname = async (nickname: string) => {
@@ -38,32 +38,38 @@ const PlayerProfile = () => {
 
   if (isLoading) {
     return (
-      <PrivateLayout>
-        <p>Carregando perfil...</p>
-      </PrivateLayout>
+      <div className="flex flex-col gap-2">
+        <HeaderSkeleton />
+        <div className="flex flex-col gap-4 p-2">
+          <SummarySkeleton />
+          <SummarySkeleton />
+          <SummarySkeleton />
+        </div>
+        <BestPartnerSkeleton />
+      </div>
     );
   }
 
   if (isError) {
     return (
-      <PrivateLayout>
+      <>
         <p className="px-4 py-2 text-red-500">
           {getApiErrorMessage(error, "Erro ao carregar o perfil.")}
         </p>
-      </PrivateLayout>
+      </>
     );
   }
 
   if (!player) {
     return (
-      <PrivateLayout>
+      <>
         <p>Jogador não encontrado.</p>
-      </PrivateLayout>
+      </>
     );
   }
 
   return (
-    <PrivateLayout>
+    <>
       <div className="flex flex-col gap-2">
         <PlayerHeader player={player} isLoading={isLoading} />
 
@@ -83,7 +89,7 @@ const PlayerProfile = () => {
 
         <BestPartner playerId={player._id} />
       </div>
-    </PrivateLayout>
+    </>
   );
 };
 

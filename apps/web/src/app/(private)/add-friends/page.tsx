@@ -17,9 +17,6 @@ import useStringUtils from "@/hooks/useStringUtils";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
-// Layout
-import PrivateLayout from "@/layouts/PrivateLayout";
-
 // Components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -263,7 +260,7 @@ const AddFriendsPage = () => {
   ).length;
 
   return (
-    <PrivateLayout>
+    <>
       <div className="flex flex-col gap-4 items-center h-screen mt-4">
         <h1 className="text-xl font-bold flex gap-4 items-center justify-center">
           <Handshake size={24} /> Adicionar Amigos
@@ -472,7 +469,7 @@ const AddFriendsPage = () => {
           </div>
         )}
       </div>
-    </PrivateLayout>
+    </>
   );
 };
 

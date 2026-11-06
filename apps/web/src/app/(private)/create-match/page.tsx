@@ -9,9 +9,6 @@ import api from "@/services/api";
 // HOC
 import withAuth from "@/hoc/withAuth";
 
-// Layout
-import PrivateLayout from "@/layouts/PrivateLayout";
-
 // Contexts and Hooks
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -257,7 +254,7 @@ const CreateMatch = () => {
   };
 
   return (
-    <PrivateLayout>
+    <>
       <Card className="container mx-auto w-full max-w-md p-2 border-0">
         <Header title="Criar Nova Partida" description="Selecione as regras para cirar uma nova partida." />
         <CardContent className="p-2">
@@ -328,7 +325,7 @@ const CreateMatch = () => {
           </form>
         </CardContent>
       </Card>
-    </PrivateLayout>
+    </>
   );
 };
 

@@ -2,6 +2,19 @@
 
 Monorepo pnpm + Turborepo com `apps/web` (Next.js 14, App Router) e `apps/api` (Express + Mongoose). `packages/` está vazio — não crie imports de workspace sem antes criar o pacote.
 
+## 🛑 Regras Estritas de Validação e Testes (Anti-Redundância)
+
+1. **Proibido Build Completo Desnecessário:** 
+   - Nunca rode `pnpm build` após alterar apenas arquivos de estilo (CSS/Tailwind), textos estáticos ou componentes isolados que não afetam a árvore de rotas ou o ecossistema de tipos global.
+   - O build completo só deve ser executado **uma única vez**, obrigatoriamente no final de toda a tarefa, antes de entregar o código.
+
+2. **Testes Unitários Cirúrgicos:**
+   - Nunca rode a suíte de testes inteira (`pnpm test` global) se você modificou apenas um arquivo.
+   - Sempre execute o comando apontando estritamente para o arquivo modificado (ex: `pnpm vitest run src/components/Button.test.tsx`).
+
+3. **Cache e Verificação Incremental:**
+   - Confie nos linters em tempo de execução da sua IDE ou use verificações incrementais (`tsc --noEmit --incremental`) em vez de compilações limpas repetidas.
+
 ## Comandos
 
 - `pnpm install` na raiz. Node >= 20; pnpm fixado em 10.33.0.
